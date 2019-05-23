@@ -1,0 +1,45 @@
+import webbrowser
+from win32com.client import Dispatch
+import speech_recognition as sr
+
+i = 0
+
+while i < 1:
+    r = sr.Recognizer()
+s = Dispatch("SAPI.spvoice")
+s.Speak("hello human!")
+with sr.Microphone() as source:
+    audio = r.adjust_for_ambient_noise(source)
+s = Dispatch("SAPI.spvoice")
+s.Speak("how can i help you?")
+audio = r.listen(source)
+
+try:
+    command = r.recognize_google(audio)
+    print("you said " + command)
+    if command in ["quit","goodbye","exit","close","bye"]:
+s = Dispatch("SAPI.spvoice")
+s.Speak("Goodbye human!")
+exit()
+
+if 'what is' and 'name' in command:
+s = Dispatch("SAPI.spvoice")
+s.Speak("My name is alpha")
+
+#open a webpage
+
+if '.com' in command:
+s = Dispatch("SAPI.spvoice")
+s.Speak("opening"+command)
+strURL = "https://www."+command
+webbrowser.open(strURL, new=0)
+
+if 'what is' or 'who is' in command:
+s = Dispatch("SAPI.spvoice")
+s.Speak("opening google chrome")
+strURL = "https://www.google.co.in/se..."+ command
+webbrowser.open(strURL, new=0)
+
+except sr.UnknownValueError:
+print("couldn't hear your command human")
+
